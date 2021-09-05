@@ -88,7 +88,7 @@ namespace StarterIntro
 
             //await obj.QueryItem();
 
-            //await obj.LoadItems();
+            await obj.LoadItems();
             //await obj.InsertNewItem();
 
             await obj.UpdateItem();
@@ -151,11 +151,11 @@ namespace StarterIntro
         {
             //ListTables().GetAwaiter().GetResult();
 
-            //UsingObjectPersistenceModel().Wait();
+            UsingObjectPersistenceModel().Wait();
 
             //UsingDocumentModel().Wait();
 
-            UsingLowLevelModel().Wait();
+            //UsingLowLevelModel().Wait();
 
             Console.ReadLine();
         }

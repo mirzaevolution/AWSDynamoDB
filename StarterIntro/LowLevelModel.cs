@@ -48,6 +48,70 @@ namespace StarterIntro
                 nameof(Profile.Id),
                 nameof(Profile.Phones)
             };
+        public async Task InsertItem(Profile profile)
+        {
+            try
+            {
+                var rawItem = ConvertToRaw(profile);
+
+                var putItemResponse = await _dynamoDbClient.PutItemAsync(new PutItemRequest
+                {
+                    Item = rawItem,
+                    TableName = _tableName
+                });
+                if (putItemResponse.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Data has been inserted successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        public async Task UpdateItem(Profile profile)
+        {
+            try
+            {
+                var updateItemResponse = await _dynamoDbClient.UpdateItemAsync(new UpdateItemRequest
+                {
+                    AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
+                    {
+                        {
+                            nameof(Profile.Email), new AttributeValueUpdate(new AttributeValue(profile.Email),AttributeAction.PUT)
+                        },
+                        {
+                            nameof(Profile.Phones), new AttributeValueUpdate(new AttributeValue(profile.Phones), AttributeAction.PUT)
+                        }
+
+                    },
+                    Key = new Dictionary<string, AttributeValue>
+                    {
+                        {
+                            nameof(Profile.CountryId), new AttributeValue
+                            {
+                                S = profile.CountryId
+                            }
+                        },
+                        {
+                            nameof(Profile.Name), new AttributeValue
+                            {
+                                S = profile.Name
+                            }
+                        }
+                    },
+                    TableName = _tableName
+                });
+                if (updateItemResponse.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Data has been updated successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         public async Task ScanItems()
         {
             #region All items
@@ -253,71 +317,6 @@ namespace StarterIntro
                 Console.WriteLine(ex);
             }
         }
-        public async Task InsertItem(Profile profile)
-        {
-            try
-            {
-                var rawItem = ConvertToRaw(profile);
-                
-                var putItemResponse = await _dynamoDbClient.PutItemAsync(new PutItemRequest
-                {
-                    Item = rawItem,
-                    TableName = _tableName
-                });
-                if(putItemResponse.HttpStatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    Console.WriteLine("Data has been inserted successfully");
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-        public async Task UpdateItem(Profile profile)
-        {
-            try
-            {
-                
 
-                var updateItemResponse = await _dynamoDbClient.UpdateItemAsync(new UpdateItemRequest
-                {
-                    AttributeUpdates = new Dictionary<string, AttributeValueUpdate>
-                    {
-                        {
-                            nameof(Profile.Email), new AttributeValueUpdate(new AttributeValue(profile.Email),AttributeAction.PUT)
-                        },
-                        {
-                            nameof(Profile.Phones), new AttributeValueUpdate(new AttributeValue(profile.Phones), AttributeAction.PUT)
-                        }
-
-                    },
-                    Key = new Dictionary<string, AttributeValue>
-                    {
-                        {
-                            nameof(Profile.CountryId), new AttributeValue
-                            {
-                                S = profile.CountryId
-                            }
-                        },
-                        {
-                            nameof(Profile.Name), new AttributeValue
-                            {
-                                S = profile.Name
-                            }
-                        }
-                    },
-                    TableName = _tableName
-                });
-                if (updateItemResponse.HttpStatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    Console.WriteLine("Data has been updated successfully");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
     }
 }

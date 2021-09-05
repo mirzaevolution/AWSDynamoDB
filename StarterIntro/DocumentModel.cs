@@ -19,6 +19,7 @@ namespace StarterIntro
             _dynamoDbClient = dynamoDbClient;
             _tableName = tableName;
             _table = Table.LoadTable(dynamoDbClient, _tableName);
+
         }
 
         private Document ConvertToDocument(Profile profile)
