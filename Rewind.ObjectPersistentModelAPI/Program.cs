@@ -38,7 +38,9 @@ namespace Rewind.ObjectPersistentModelAPI
             //}).GetAwaiter().GetResult();
 
             //op.UpdateEmail("ID", "Rama Vino", "ramavino.1985@gmail.com").GetAwaiter().GetResult();
-            op.UpdateName("ID", "Ayu Sekar Asri", "Vani Sekar Asri").GetAwaiter().GetResult();
+            //op.UpdateName("ID", "Ayu Sekar Asri", "Vani Sekar Asri").GetAwaiter().GetResult();
+            op.UpdatePhones().GetAwaiter().GetResult();
+
 
         }
         static void Main(string[] args)

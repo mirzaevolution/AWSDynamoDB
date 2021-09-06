@@ -37,7 +37,9 @@ namespace Rewind.ObjectPersistentModelAPI
             {
                 new ScanCondition(nameof(Profile.Name), ScanOperator.BeginsWith, "Mi")
             }).GetRemainingAsync();
+
             IterateList(profiles);
+
             Console.WriteLine("\n\nGrab all items where email in ('ghulamcyber@hotmail.com','raraanjani@gmail.com','hawk@gmail.com'): ");
             ScanFilter scanFilter = new ScanFilter();
             scanFilter.AddCondition(nameof(Profile.Email), ScanOperator.In, "ghulamcyber@hotmail.com", "raraanjani@gmail.com", "hawk@gmail.com");
@@ -142,6 +144,26 @@ namespace Rewind.ObjectPersistentModelAPI
             else
             {
                 Console.WriteLine("Item not found!");
+            }
+        }
+
+        public async Task UpdatePhones()
+        {
+            Profile profile = await _context.LoadAsync<Profile>("ID", "Ahmad P. Muzakir");
+            if (profile != null)
+            {
+                profile.Phones.Remove("+62-896-2221-2224");
+                profile.Phones.AddRange(new[]
+                {
+                    "+62897890011",
+                    "+62897890012"
+                });
+                await _context.SaveAsync<Profile>(profile);
+                await ScanAll();
+            }
+            else
+            {
+                Console.WriteLine("Data not found");
             }
         }
     }
